@@ -1,23 +1,112 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import Navbar from "./Components/Navbar";
+import Favorites from "./Pages/Favorites";
+import Home from "./Pages/Home";
+
+import "./Style/homepage.css";
+
+import axios from "axios";
+import { baseUrl } from "./config/baseUrl";
+import { apiKey } from "./config/apiKey";
+import { useEffect, useState } from "react";
 
 function App() {
+  const [pageNumber, setPageNumber] = useState(1);
+  const [movieList, setMovieList] = useState([]);
+  const [hideLoadMoreBtn, setHideLoadMoreBtn] = useState(false);
+  const [favoritesMovies, setFavoritesMovies] = useState([]);
+  const [homepageTitle, setHomepageTitle] = useState("top rated movies");
+
+  const topRatedMoviesApi = `${baseUrl}/top_rated?api_key=${apiKey}&language=en-US&page=${pageNumber}`;
+
+  const getMovies = async () => {
+    try {
+      const res = await axios.get(topRatedMoviesApi);
+      setMovieList(movieList.concat(res.data.results));
+      if (res.data.total_pages === pageNumber) {
+        setHideLoadMoreBtn(true);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const loadMoreMovies = () => {
+    setPageNumber((prevVal) => prevVal + 1);
+  };
+
+  const addToFavorites = (movieId) => {
+    let selectedMovie = movieList.filter((movie) => movie.id === movieId);
+    setFavoritesMovies((oldArray) => [...oldArray, selectedMovie[0]]);
+  };
+
+  const deleteFavoriteMovie = (movieId) => {
+    setFavoritesMovies(favoritesMovies.filter((movie) => movie.id !== movieId));
+  };
+
+  const handleSubmit = (inputVal) => {
+    const searchMoviesApi = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${inputVal}`;
+    const searchMovies = async () => {
+      try {
+        const res = await axios.get(searchMoviesApi);
+        setMovieList(res.data.results);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    setHideLoadMoreBtn(true);
+    setHomepageTitle("searched movies");
+    searchMovies();
+  };
+
+  const clearSearch = async () => {
+    const res = await axios.get(topRatedMoviesApi);
+    setMovieList(res.data.results);
+    setHideLoadMoreBtn(false);
+    setHomepageTitle("top rated movies");
+  };
+
+  useEffect(() => {
+    getMovies();
+  }, []);
+
+  useEffect(() => {
+    getMovies();
+  }, [pageNumber]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route
+            exact
+            path="/movie-project/"
+            element={
+              <Home
+                movieList={movieList}
+                hideLoadMoreBtn={hideLoadMoreBtn}
+                loadMoreMovies={loadMoreMovies}
+                addToFavorites={addToFavorites}
+                handleSubmit={handleSubmit}
+                clearSearch={clearSearch}
+                homepageTitle={homepageTitle}
+              />
+            }
+          />
+          <Route
+            exact
+            path="/movie-project/favorites"
+            element={
+              <Favorites
+                favoritesMovies={favoritesMovies}
+                deleteFavoriteMovie={deleteFavoriteMovie}
+              />
+            }
+          />
+        </Routes>
+      </Router>
     </div>
   );
 }

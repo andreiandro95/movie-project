@@ -1,0 +1,91 @@
+.search-form{
+    background-color: white;
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    form{
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        .search-input, .submit-input{
+            width: 100%;
+            box-sizing: border-box;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid transparent;
+        }
+        .search-input{
+            border: 1px solid #ccc;
+            display: block;
+            margin-bottom: 5px;
+            &:focus{
+                border: 1px solid rgb(0, 20, 51);
+            }
+        }
+        .submit-input{
+            background-color: rgb(211, 227, 253);
+            border: 1px solid rgb(0, 20, 51);
+            cursor: pointer;
+            &:hover{
+                background-color: rgb(0, 20, 51);
+                color: white;
+            }
+        }
+    }
+    .clear-search{
+        display: block;
+        text-align: center;
+        margin: 10px;
+        cursor: pointer;
+        padding: 5px;
+        span{
+            text-transform: capitalize;
+            background-color: rgb(211, 227, 253);
+            border: 1px solid rgb(0, 20, 51);
+            border-radius: 5px;
+            padding: 5px 10px;
+            &:hover{
+                background-color: rgb(0, 20, 51);
+                color: white;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .search-form{
+        form{
+            text-align: center;
+            .search-input, .submit-input{
+                width: fit-content;
+                display: inline-block;
+            }
+            .search-input{
+                min-width: 300px;
+                margin-right: 5px;
+            }
+            .submit-input{
+                padding: 5px 10px;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    .search-form{
+        form{
+            text-align: center;
+            .search-input, .submit-input{
+                width: fit-content;
+                display: inline-block;
+            }
+            .search-input{
+                min-width: 500px;
+                margin-right: 5px;
+            }
+            .submit-input{
+                padding: 5px 15px;
+            }
+        }
+        
+    }
+}
