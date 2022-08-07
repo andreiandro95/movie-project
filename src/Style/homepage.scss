@@ -11,6 +11,21 @@
     text-align: center;
     margin: 20px;
 }
+.loading {
+    width: 100%;
+    min-height: 200px;
+    animation: skeleton-loading 1s linear infinite alternate;
+}
+  
+@keyframes skeleton-loading {
+    0% {
+        background-color: hsl(200, 20%, 80%);
+    }
+    100% {
+        background-color: hsl(200, 20%, 95%);
+    }
+}
+  
 .movie-list{
     padding: 0 10px;
     width: 100%;

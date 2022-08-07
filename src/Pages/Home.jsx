@@ -11,19 +11,22 @@ const Home = ({
   handleSubmit,
   clearSearch,
   homepageTitle,
+  isLoading,
+  noSearchResults,
 }) => {
   return (
     <>
       <SearchForm handleSubmit={handleSubmit} clearSearch={clearSearch} />
       <div className="title-of-page">{homepageTitle}</div>
       <div className="movie-list">
-        {movieList.length > 0 ? (
+        {!noSearchResults ? (
           movieList.map((movie, key) => (
             <TopRatedMovie
               movie={movie}
               key={movie.id}
               movieId={movie.id}
               addToFavorites={addToFavorites}
+              isLoading={isLoading}
             />
           ))
         ) : (
